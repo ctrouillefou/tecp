@@ -6,7 +6,7 @@ Supplementary code for the paper:
 
 **"From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems"**  
 *Christophe Marcel Trouillefou*  
-Submitted to *Acta Astronautica* (2026)
+Submitted to *PLoS Computational Biology* (2026)
 
 ## Overview
 
@@ -20,9 +20,12 @@ This repository contains all the scripts necessary to reproduce the results pres
 |:---|:---|
 | `algo_2_3d_bio_V8.3.py` | Homogeneous steady‑state analysis: bifurcation sweep over $\gamma$, Jacobian eigenvalues, and dynamic On/Off simulation |
 | `algo_3_3d_bio_V5_stochastic.py` | Full 3D stochastic simulation with Gaussian noise on Peltier power and day/night cycle |
-| `algo_3_3d_bio_V5_deterministic.py` | Full 3D deterministic simulation over 5000 time steps (Figures 4–5 of the paper) |
-| `build_masks.py` | Reusable Boolean mask builder for the five process‑specific spatial domains (imported by the 3D scripts) |
-| `compute_volume_fractions.py` | Computes the effective volume fractions from geometric thresholds (used by the homogeneous analysis) |
+| `algo_3_3d_bio_V5_deterministic.py` | Full 3D deterministic simulation over 5000 time steps (Figures 3–4 of the companion paper) |
+| `algo_3_3d_bio_V6.2_deterministic_www.py` | 3D simulation with active Wood Wide Web and stroboscopic Poincaré section analysis |
+| `algo_3_3d_bio_V6.3_sweep.py` | Sweep of cooperation coefficient $\gamma$ and forcing period for forced limit cycle analysis |
+| `period_sweep_remaining.py` | Lightweight script to complete an interrupted period sweep |
+| `build_masks.py` | Reusable Boolean mask builder for the five process‑specific spatial domains |
+| `compute_volume_fractions.py` | Computes the effective volume fractions from geometric thresholds |
 | `plot_masks.py` | Visualisation script for the five Boolean masks (outputs `masks_TECP.png` and `.svg`) |
 
 ## Dependencies
@@ -63,7 +66,7 @@ Citation
 
 If you use this code in your research, please cite:
 
-    Trouillefou, C.M. (2026). From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems. Acta Astronautica, submitted.
+    Trouillefou, C.M. (2026). From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems. PLoS Computational Biology, submitted.
 
 The code is also archived on Zenodo with DOI: [to be inserted after publication].
 Contact
