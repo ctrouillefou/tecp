@@ -68,7 +68,7 @@ If you use this code in your research, please cite:
 
     Trouillefou, C.M. (2026). From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems. PLoS Computational Biology, submitted.
 
-The code is also archived on Zenodo with DOI: [to be inserted after publication].
+The code is also archived on Zenodo with DOI: [DOI_version_1: 10.5281/zenodo.20498369 and DOI_version_2: 10.5281/zenodo.20587108].
 Contact
 
 Christophe Marcel Trouillefou — christophe.trouillefou@gmail.com
