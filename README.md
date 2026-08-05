@@ -1,74 +1,293 @@
-# tecp
-Toroidal Ecological Coupled Platform
-# TECP — Toroidal Ecological Coupled Platform
+README.md
+markdown
 
-Supplementary code for the paper:
+# TECP – Toroidal Ecological Coupled Platform
 
-**"From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems"**  
-*Christophe Marcel Trouillefou*  
-Submitted to *PLoS Computational Biology* (2026)
+**Version 3 – Final release for submission to *npj Microgravity***
+
+This repository contains the complete source code for the numerical simulations presented in:
+
+> Trouillefou, C.M. et al. (2026). *Parametric resilience in a closed ecological reactor: The Wood Wide Web as a distributed PID controller for life support.* npj Microgravity (submitted).
 
 ## Overview
 
-The TECP is a 3D reaction‑diffusion‑chemotaxis model of a closed toroidal ecological reactor for bioregenerative life support. It couples plant physiology, water cycling, and a mechanistic mycorrhizal network (the "Wood Wide Web") to study whether fungal cooperation can replace external control.
+The TECP model simulates a closed ecological reactor with a mycorrhizal network (Wood Wide Web) using 3D reaction‑diffusion‑chemotaxis equations. The code includes:
 
-This repository contains all the scripts necessary to reproduce the results presented in the paper.
+- Homogeneous steady‑state analysis and bifurcation sweeps (V8.3)
+- 3D deterministic simulations without WWW (V5)
+- Stroboscopic Poincaré section analysis under periodic forcing (V6.2)
+- Parameter sweeps for the forced limit cycle (V6.3)
+- Re‑dimensionnalised V10 simulations with realistic time scales
+- 1D and 2D parameter sweeps for parametric resilience and power‑law extraction
+- Boolean mask generation and visualisation
 
-## Files
+All simulations are implemented in Python using the **FiPy** finite‑volume library.
 
-| File | Description |
-|:---|:---|
-| `algo_2_3d_bio_V8.3.py` | Homogeneous steady‑state analysis: bifurcation sweep over $\gamma$, Jacobian eigenvalues, and dynamic On/Off simulation |
-| `algo_3_3d_bio_V5_stochastic.py` | Full 3D stochastic simulation with Gaussian noise on Peltier power and day/night cycle |
-| `algo_3_3d_bio_V5_deterministic.py` | Full 3D deterministic simulation over 5000 time steps (Figures 3–4 of the companion paper) |
-| `algo_3_3d_bio_V6.2_deterministic_www.py` | 3D simulation with active Wood Wide Web and stroboscopic Poincaré section analysis |
-| `algo_3_3d_bio_V6.3_sweep.py` | Sweep of cooperation coefficient $\gamma$ and forcing period for forced limit cycle analysis |
-| `period_sweep_remaining.py` | Lightweight script to complete an interrupted period sweep |
-| `build_masks.py` | Reusable Boolean mask builder for the five process‑specific spatial domains |
-| `compute_volume_fractions.py` | Computes the effective volume fractions from geometric thresholds |
-| `plot_masks.py` | Visualisation script for the five Boolean masks (outputs `masks_TECP.png` and `.svg`) |
+---
 
-## Dependencies
+## Requirements
 
-- Python 3.10+
-- NumPy 1.24+
-- SciPy 1.11+
-- Matplotlib 3.7+
-- [FiPy](https://www.ctcms.nist.gov/fipy/) 3.4+ (for 3D simulations)
+- Python 3.8 or higher
+- FiPy 3.4 or higher
+- NumPy ≥ 1.20
+- SciPy ≥ 1.11
+- Matplotlib ≥ 3.5
+- Pandas (for CSV processing)
 
-## Usage
+Install the required packages with:
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ctrouillefou/tecp.git
-   cd tecp
-   
-2. Install the required packages:
-   ```bash
-   pip install numpy scipy matplotlib fipy
+```bash
+pip install fipy numpy scipy matplotlib pandas
 
-3. Run the homogeneous analysis:
-   ```bash
-   python algo_2_3d_bio_V8.3.py
+Installation
 
-4. Run the 3D deterministic simulation:
-   ```bash
-   python algo_3_3d_bio_V5_deterministic.py
+    Clone or download this repository to your local machine or VM.
 
-5. Run the 3D stochastic simulation:
-   ```bash
-   python algo_3_3d_bio_V5_stochastic.py
+    Ensure all Python scripts are in the same directory (or adjust the PYTHONPATH accordingly).
 
-License
+    Generate the parameter files as described below.
 
-This project is licensed under the GNU General Public License v3.0 — see the LICENSE file for details.
-Citation
+File structure
+File	Description
+algo_2_3d_bio_V8.3.py	Homogeneous steady‑state and stability analysis (bistability, bifurcation)
+algo_3_3d_bio_V5_deterministic.py	3D deterministic simulation without mycorrhizal network (5000 steps)
+algo_3_3d_bio_V6.2_deterministic_www.py	3D simulation with WWW and stroboscopic Poincaré section (dimensionless)
+algo_3_3d_bio_V6.3_sweep.py	Sweeps over γ and forcing period for the forced limit cycle
+algo_3_3d_bio_V10.0.py	Re‑dimensionnalised 3D simulation (real time scales, 24h forcing)
+sweep_gamma_1D_V10.py	Generic 1D sweep over γ at a fixed signal speed (takes speed as argument)
+sweep_gamma_2D_V10.py	2D sweep over γ × signal speed (30 days)
+scale_params_V10.py	Re‑dimensionnalisation script: converts dimensionless parameters to real‑world rates
+build_masks.py	Builds the five Boolean masks from geometric parameters
+compute_volume_fractions.py	Analytical computation of effective volume fractions
+plot_masks.py	Visualises the Boolean masks (2D cross‑section)
+Stroboscopic_Poincare_Section_Figure.py	Regenerates Figure 6A from existing CSV data
+generate_power_law_figure.py	Generates Figure 10 (power‑law fit) from the 1D sweep summaries
+extract_gamma_crit.py	Automatically extracts γ_crit from 1D sweep results
+params_adim.json	Dimensionless parameters (input for scaling)
+params_real.json	Re‑dimensionnalised parameters (generated by scale_params_V10.py)
+Usage
+1. Prepare the parameter files
+
+Before running any simulation, generate the real‑world parameters:
+bash
+
+python3 scale_params_V10.py --input params_adim.json --output params_real.json
+
+This creates params_real.json with all rates converted to physical units (s⁻¹).
+2. Homogeneous analysis (V8.3)
+
+Run the bifurcation sweep for the homogeneous system:
+bash
+
+python3 algo_2_3d_bio_V8.3.py
+
+Outputs: Figure_Bifurcation_Gamma_V8.3_en.png and console logs.
+3. 3D deterministic without WWW (V5)
+bash
+
+python3 algo_3_3d_bio_V5_deterministic.py
+
+Outputs:
+
+    Figure4_Biology_Deterministic.png
+
+    Figure5_Thermo_Deterministic.png
+
+    TECP_3D_deterministic_results.csv
+
+4. Stroboscopic Poincaré section (V6.2)
+bash
+
+python3 algo_3_3d_bio_V6.2_deterministic_www.py
+
+Outputs:
+
+    Figure_V6.2_TimeSeries.png
+
+    Figure_V6.2_Poincare_Strobe.png
+
+    Figure_V6.2_ReturnMap_CO2_on.png
+
+    Figure_V6.2_ReturnMap_CO2_off.png
+
+    TECP_V6.2_stroboscopic.csv
+
+5. Sweeps for the forced limit cycle (V6.3)
+bash
+
+python3 algo_3_3d_bio_V6.3_sweep.py
+
+Outputs:
+
+    Figure_Bifurcation_gamma_CO2.png
+
+    Figure_Period_Amplitude.png
+
+    sweep_results.csv
+
+6. Re‑dimensionnalised V10 simulation
+
+Run a single simulation (30 days, 24h forcing) with or without WWW.
+
+To run the full 30‑day simulation:
+bash
+
+python3 algo_3_3d_bio_V10.0.py
+
+Outputs:
+
+    Figure_V10_TimeSeries.png
+
+    Figure_V10_Poincare_Strobe.png
+
+    Figure_V10_ReturnMap_CO2_on.png
+
+    Figure_V10_ReturnMap_CO2_off.png
+
+    TECP_V10_stroboscopic.csv
+
+    sim_v10_progress.log
+
+7. 1D sweeps (γ sweep at fixed signal speed)
+
+The generic script sweep_gamma_1D_V10.py takes a single argument: the signal speed factor.
+
+Example:
+bash
+
+python3 sweep_gamma_1D_V10.py 4
+python3 sweep_gamma_1D_V10.py 8
+python3 sweep_gamma_1D_V10.py 16
+python3 sweep_gamma_1D_V10.py 32
+python3 sweep_gamma_1D_V10.py 64
+python3 sweep_gamma_1D_V10.py 128
+python3 sweep_gamma_1D_V10.py 168
+
+For each speed, outputs:
+
+    sweep_gamma_1D_speedN_summary.csv
+
+    sweep_gamma_1D_speedN_series.csv
+
+    sweep_gamma_1D_speedN_bifurcation.png
+
+    sweep_gamma_1D_speedN_timeseries.png
+
+    sweep_gamma_1D_speedN.log
+
+8. 2D sweep (γ × signal speed)
+bash
+
+python3 sweep_gamma_2D_V10.py
+
+Outputs:
+
+    sweep_2D_full.csv
+
+    heatmap_phase.png
+
+    entropy_evolution.png
+
+    water_cycle.png
+
+    daynight_highlight.png
+
+    sweep_2D.log
+
+9. Mask visualisation
+
+2D cross‑section:
+bash
+
+python3 plot_masks.py
+
+Outputs: masks_TECP.png and masks_TECP.svg.
+10. Post‑processing and figure generation
+Regenerate Figure 6A (Stroboscopic Poincaré section)
+bash
+
+python3 Stroboscopic_Poincare_Section_Figure.py
+
+This uses the existing TECP_V6.2_stroboscopic.csv to produce a single‑curve version.
+Generate Figure 10 (Power‑law)
+bash
+
+python3 generate_power_law_figure.py
+
+Requires the summary CSV files from all 1D sweeps (speed 4, 8, 16, 32, 64, 168). Outputs Figure10_power_law_final.png.
+Extract γ_crit from multiple 1D sweeps
+bash
+
+python3 extract_gamma_crit.py
+
+Scans all sweep_gamma_1D_speed*_summary.csv files, extracts γ_crit (20 % threshold), fits the power law, and saves gamma_crit_summary.csv and gamma_crit_law_of_power.png.
+Reproducing the figures in the manuscript
+
+    Figure 1 (Masks): python3 plot_masks.py
+
+    Figure 2 (Homogeneous bifurcation): python3 algo_2_3d_bio_V8.3.py
+
+    Figure 3 (Degradation – biology): python3 algo_3_3d_bio_V5_deterministic.py
+
+    Figure 4 (Degradation – thermodynamics): same as above
+
+    Figure 5 (Time series with WWW): python3 algo_3_3d_bio_V6.2_deterministic_www.py
+
+    Figure 6 (Poincaré section and return maps): same as above
+
+    Figure 7 (Bifurcation and robustness): python3 algo_3_3d_bio_V6.3_sweep.py
+
+    Figure 8 (Heatmap, V10): python3 sweep_gamma_2D_V10.py
+
+    Figure 9 (Smooth transition): combine all sweep_gamma_1D_speed*_summary.csv files into a single overlay plot (see script in generate_Figure9.py, not included but straightforward to write).
+
+    Figure 10 (Power‑law): python3 generate_power_law_figure.py
+
+Example workflow (full reproducibility)
+bash
+
+# 1. Generate real parameters
+python3 scale_params_V10.py --input params_adim.json --output params_real.json
+
+# 2. Run V8.3 homogeneous analysis
+python3 algo_2_3d_bio_V8.3.py
+
+# 3. Run V5 deterministic simulation
+python3 algo_3_3d_bio_V5_deterministic.py
+
+# 4. Run V6.2 stroboscopic analysis
+python3 algo_3_3d_bio_V6.2_deterministic_www.py
+
+# 5. Run V6.3 sweeps
+python3 algo_3_3d_bio_V6.3_sweep.py
+
+# 6. Run V10 2D sweep
+python3 sweep_gamma_2D_V10.py
+
+# 7. Run all 1D sweeps (one by one, or in a loop)
+for speed in 4 8 16 32 64 128 168; do
+    python3 sweep_gamma_1D_V10.py $speed
+done
+
+# 8. Generate final figures
+python3 extract_gamma_crit.py
+python3 generate_power_law_figure.py
+python3 Stroboscopic_Poincare_Section_Figure.py
+
+# 9. Plot masks
+python3 plot_masks.py
+
+Licence and citation
+
+This code is released under the GNU General Public Licence v3.0 (GPLv3). See the LICENCE file (or COPYING) for the full terms.
 
 If you use this code in your research, please cite:
 
-    Trouillefou, C.M. (2026). From Control to Cooperation: A Mathematical Proof That Fungal Networks Can Replace Reinforcement Learning in Closed Life Support Systems. PLoS Computational Biology, submitted.
+    Trouillefou, C.M. et al. (2026). Parametric resilience in a closed ecological reactor: The Wood Wide Web as a distributed PID controller for life support. npj Microgravity (submitted).
 
-The code is also archived on Zenodo with DOI: [DOI_version_1: 10.5281/zenodo.20498369 and DOI_version_2: 10.5281/zenodo.20587108].
+This version of the code is archived on Zenodo with the DOI: 10.5281/zenodo.21721670. All previous versions remain accessible for traceability.
 Contact
 
-Christophe Marcel Trouillefou — christophe.trouillefou@gmail.com
+For questions, bug reports, or collaboration requests, please contact the corresponding author (Christophe Trouillefou) via the journal editorial office.
+
+Last updated: July 2026
