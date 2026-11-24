@@ -3,7 +3,7 @@ markdown
 
 # TECP – Toroidal Ecological Coupled Platform
 
-**Version 0.0.3 – Final release for submission to *npj Microgravity***
+**Version 3 – Final release for submission to *npj Microgravity***
 
 This repository contains the complete source code for the numerical simulations presented in:
 
